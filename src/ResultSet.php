@@ -39,6 +39,11 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
         $this->tableName = $tableName;
     }
     
+    public function setSingle($single)
+    {
+        $this->single = $single;
+    }
+    
     public function getQueryBuilder()
     {
         return $this->queryBuilder;
@@ -52,9 +57,14 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
         }
     }
     
-    public function setSingle($single)
+    protected function createRow($data)
     {
-        $this->single = $single;
+        $row = new Row($data);
+        
+        $row->setTableName($this->getTableName());
+        $row->setConnection($this->getQueryBuilder()->getConnection());
+        
+        return $row;
     }
     
     public function offsetGet($key)
@@ -74,16 +84,6 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
         }
         
         return [];
-    }
-    
-    public function createRow($data)
-    {
-        $row = new Row($data);
-        
-        $row->setTableName($this->getTableName());
-        $row->setConnection($this->getQueryBuilder()->getConnection());
-        
-        return $row;
     }
     
     public function offsetSet($key, $value)
