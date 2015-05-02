@@ -1,0 +1,16 @@
+{
+    "name": "la/db",
+    "type": "library",
+    "description": "Database Abstraction Layer",
+    "keywords": ["dbal", "database", "persistence", "fluent-interface"],
+    "license": "MIT",
+    "authors": [
+        {"name": "Abdala Cerqueira", "email": "abdala.cerqueira@gmail.com"}
+    ],
+    "require": {
+        "doctrine/dbal": "~2.5"
+    },
+    "autoload": {
+        "psr-4": { "Reduce\\Db\\": "src/" }
+    }
+}
