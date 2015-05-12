@@ -2,21 +2,29 @@
 
 namespace Reduce\Db;
 
-use ArrayObject;
+use Iterator;
+use ArrayAccess;
+use Countable;
 use JsonSerializable;
-use Reduce\Db\Connection;
+use Reduce\Db\ResultSet;
 
-class Row extends ArrayObject implements JsonSerializable
+class Row implements Iterator, ArrayAccess, Countable, JsonSerializable
 {
-    protected $tableName;
-    protected $connection;
+    protected $data;
+    protected $resultSet;
+    
+    public function __construct(ResultSet $resultSet, $data = [])
+    {
+        $this->resultSet = $resultSet;
+        $this->data      = $data;
+    }
     
     public function __get($name)
     {
         if(isset($this[$name . '_id'])) {
-            $id = $this[$name . '_id'];
+            $field = $this[$name . '_id'];
             
-            return $this->getConnection()->{$name}[$id];
+            return $this->getConnection()->{$name}[$field];
         }
         
         trigger_error('Undefined field: ' . $name . '_id on table ' . $this->getTableName());
@@ -34,26 +42,88 @@ class Row extends ArrayObject implements JsonSerializable
     
     public function getConnection()
     {
-        return $this->connection;
-    }
-    
-    public function setConnection(Connection $connection)
-    {
-        $this->connection = $connection;
+        return $this->resultSet->getQueryBuilder()->getConnection();
     }
     
     public function getTableName()
     {
-        return $this->tableName;
+        return $this->resultSet->getTableName();
     }
     
-    public function setTableName($tableName)
+    protected function execute()
     {
-        $this->tableName = $tableName;
+        $data = $this->resultSet->toArray();
+        
+        if (count($data)) {
+            $this->data = $data[0];
+        }
+    }
+    
+    public function offsetGet($key)
+    {
+        if (! count($this->data)) {
+            $this->execute();
+        }
+        
+        return $this->data[$key];
+    }
+    
+    public function offsetSet($key, $value)
+    {
+        $this->data[$key] = $value;
+    }
+    
+    public function offsetUnset($key)
+    {
+        unset($this->data[$key]);
+    }
+    
+    public function offsetExists($key)
+    {
+		return !! $this->offsetGet($key);
+    }
+    
+    public function count()
+    {
+        $this->execute();
+        return count($this->data);
+    }
+    
+	public function rewind() 
+    {
+        $this->execute();
+        reset($this->data);
+	}
+	
+	public function current() 
+    {
+        return current($this->data);
+	}
+	
+	public function key() 
+    {
+        $this->execute();
+		return key($this->data);
+	}
+	
+	public function next() 
+    {
+		next($this->data);
+	}
+	
+	public function valid() 
+    {
+        $key = key($this->data);
+        return ($key !== null);
     }
     
     public function jsonSerialize()
     {
-        return (array) $this;
+        return $this->data;
+    }
+    
+    public function __toString()
+    {
+        return $this->resultSet->getQueryBuilder()->__toString();
     }
 }

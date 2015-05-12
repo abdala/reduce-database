@@ -16,17 +16,25 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
     protected $executed = false;
     protected $tableName;
     
-    public function __construct($queryBuilder) 
+    public function __construct($tableName, $queryBuilder) 
     {
+        $this->tableName    = $tableName;
         $this->queryBuilder = $queryBuilder;
+        
+        $this->queryBuilder->select('*')->from($tableName);
     }
     
     public function __call($name, $args)
     {
         if (method_exists($this->getQueryBuilder(), $name)) {
             call_user_func_array([$this->getQueryBuilder(), $name], $args);
-            return $this;
         }
+        
+        $condition = sprintf('%s.id = %s.%s_id', $this->getTableName(), $name, $this->getTableName());
+        
+        $this->queryBuilder->leftJoin($this->getTableName(), $name, $name, $condition);
+        
+        return $this;
     }
     
     public function getTableName()
@@ -34,14 +42,14 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
         return $this->tableName;
     }
     
-    public function setTableName($tableName)
-    {
-        $this->tableName = $tableName;
-    }
-    
     public function setSingle($single)
     {
         $this->single = $single;
+    }
+    
+    public function getSingle()
+    {
+        return $this->single;
     }
     
     public function getQueryBuilder()
@@ -57,25 +65,17 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
         }
     }
     
-    protected function createRow($data)
+    protected function createRow($data = [])
     {
-        $row = new Row($data);
-        
-        $row->setTableName($this->getTableName());
-        $row->setConnection($this->getQueryBuilder()->getConnection());
-        
-        return $row;
+        return new Row($this, $data);
     }
     
     public function offsetGet($key)
     {
         if ($this->single) {
             $this->getQueryBuilder()->where('id = ?', $key);
-            $this->execute();
             
-            if (count($this->data)) {
-                return $this->createRow($this->data[0]);
-            }
+            return $this->createRow();
         }
         
         if (isset($this->data[$key])) {
