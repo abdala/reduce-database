@@ -6,8 +6,6 @@ use Doctrine\DBAL\Connection as DBAL;
 use Doctrine\DBAL\Driver;
 use Doctrine\DBAL\Configuration;
 use Doctrine\Common\EventManager;
-use Reduce\Db\Event\QueryBuilderEventArgs;
-use Reduce\Db\Event\ResultSetEventArgs;
 
 class Connection extends DBAL
 {    
