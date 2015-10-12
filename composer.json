@@ -1,5 +1,5 @@
 {
-  "name": "la/db",
+  "name": "reduce/db",
   "type": "library",
   "description": "Database Abstraction Layer",
   "keywords": ["dbal", "database", "persistence", "fluent-interface"],
@@ -8,10 +8,10 @@
     {"name": "Abdala Cerqueira", "email": "abdala.cerqueira@gmail.com"}
   ],
   "require": {
-    "doctrine/dbal": "~2.5"
+    "doctrine/dbal": "^2.5"
   },
   "require-dev": {
-    "phpunit/phpunit": "~4.4"
+    "phpunit/phpunit": "^4.4"
   },
   "autoload": {
     "psr-4": { 
