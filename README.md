@@ -38,17 +38,17 @@ WHERE
 =========
 
 ```php
-$db->tableName[3]; //SELECT * FROM WHERE tableName id = ?
+$db->tableName[3]; //SELECT * FROM tableName WHERE id = ?
 
 ```
 
 ```php
-$db->tableName('name', 'Jose'); //SELECT * FROM WHERE tableName name = ?
+$db->tableName('name', 'Jose'); //SELECT * FROM tableName WHERE name = ?
 
 ```
 
 ```php
-$db->tableName('id > ?', 3); //SELECT * FROM WHERE tableName id > ?
+$db->tableName('id > ?', 3); //SELECT * FROM tableName WHERE id > ?
 
 ```
 
