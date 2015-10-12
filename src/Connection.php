@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection as DBAL;
 use Doctrine\DBAL\Driver;
 use Doctrine\DBAL\Configuration;
 use Doctrine\Common\EventManager;
-use InvalidArgumentException;
 
 class Connection extends DBAL
 {    
