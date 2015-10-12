@@ -7,6 +7,7 @@ use ArrayAccess;
 use Countable;
 use JsonSerializable;
 use Reduce\Db\Row;
+use Reduce\Db\Query\QueryBuilder;
     
 class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable 
 {
@@ -16,10 +17,11 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
     protected $executed = false;
     protected $tableName;
     
-    public function __construct($tableName, $queryBuilder) 
+    public function __construct($tableName, QueryBuilder $queryBuilder, $singleResultSet = false) 
     {
         $this->tableName    = $tableName;
         $this->queryBuilder = $queryBuilder;
+        $this->single       = $singleResultSet;
         
         $this->queryBuilder->select('*')->from($tableName);
     }
@@ -28,6 +30,7 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
     {
         if (method_exists($this->getQueryBuilder(), $name)) {
             call_user_func_array([$this->getQueryBuilder(), $name], $args);
+            return $this;
         }
         
         $condition = sprintf('%s.id = %s.%s_id', $this->getTableName(), $name, $this->getTableName());
@@ -40,16 +43,6 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
     public function getTableName()
     {
         return $this->tableName;
-    }
-    
-    public function setSingle($single)
-    {
-        $this->single = $single;
-    }
-    
-    public function getSingle()
-    {
-        return $this->single;
     }
     
     public function getQueryBuilder()

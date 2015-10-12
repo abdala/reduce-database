@@ -9,14 +9,14 @@ class QueryBuilder extends DBALQueryBuilder
     public function where($predicate, $value = null)
     {
         if ($value) {
-            $this->andWhere($predicate);
+            $this->andWhere($this->normalizePredicate($predicate));
             $this->createPositionalParameter($value);
             return $this;
         }
         
         if (is_array($predicate)) {
             foreach ($predicate as $key => $value) {
-                $this->where($key, $value);
+                $this->where($this->normalizePredicate($key), $value);
             }
 
             return $this;
@@ -25,5 +25,14 @@ class QueryBuilder extends DBALQueryBuilder
         $this->andWhere($predicate);
         
         return $this;
-    }    
+    }
+    
+    protected function normalizePredicate($predicate)
+    {
+        if (strpos($predicate, '?') === false) {
+            $predicate .= ' = ?';
+        }
+        
+        return $predicate;
+    }
 }

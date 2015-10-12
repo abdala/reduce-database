@@ -9,7 +9,8 @@ use Doctrine\DBAL\Driver\PDOSqlite\Driver;
 
 class ResultSetTest extends \PHPUnit_Framework_TestCase
 {
-    protected $instance;
+    const TABLE_NAME = 'tableName';
+    protected $resultSet;
         
     protected function setUp()
     {
@@ -17,28 +18,68 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
                            ->setConstructorArgs(['global' => ['memory' => true], new Driver])
                            ->getMock();
         
-        $queryBuilder = $this->getMockBuilder('Reduce\Db\Query\QueryBuilder')
-                             ->setConstructorArgs([$connection])
-                             ->getMock();
+        $this->resultSet = new ResultSet(static::TABLE_NAME, new QueryBuilder($connection));
+    }
         
-        $queryBuilder->method('select')
-                     ->will($this->returnSelf());
-        
-        $this->instance = new ResultSet('tableName', $queryBuilder);
+    /** @test */
+    public function getTableName()
+    {
+        $this->assertEquals('tableName', $this->resultSet->getTableName());
     }
     
-    public function testExecuteQueryBuilderFromMagicCall()
+    /** @test */
+    public function simpleSelect()
     {
-        $this->instance->getQueryBuilder()
-                       ->expects($this->once())
-                       ->method('orderBy')
-                       ->with($this->stringContains('id'));
-        
-        $this->instance->orderBy('id');
+        $sql = 'SELECT * FROM ' . static::TABLE_NAME;
+        $this->assertEquals((string) $this->resultSet, $sql);
     }
     
-    public function testOffsetGetCall()
+    /** @test */
+    public function addingOrderBy()
     {
-        // offsetGet
+        $this->resultSet->orderBy('id');
+        $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' ORDER BY id ASC';
+        
+        $this->assertEquals((string) $this->resultSet, $sql);
+    }
+    
+    /** @test */
+    public function addingWhere()
+    {
+        $this->resultSet->where('id', 1);
+        
+        $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE id = ?';
+        
+        $this->assertEquals((string) $this->resultSet, $sql);
+    }
+    
+    /** @test */
+    public function addingWhereInArray()
+    {
+        $this->resultSet->where(['id' => 1]);
+        
+        $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE id = ?';
+        
+        $this->assertEquals((string) $this->resultSet, $sql);
+    }
+    
+    /** @test */
+    public function addingFullSyntax()
+    {
+        $this->resultSet->where('id = ?', 1);
+        
+        $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE id = ?';
+        
+        $this->assertEquals((string) $this->resultSet, $sql);
+    }
+
+    /** @test */
+    public function addingWhereWithoutValue()
+    {
+        $this->resultSet->where('id IS NULL');
+        
+        $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE id IS NULL';
+        
+        $this->assertEquals((string) $this->resultSet, $sql);
     }
 }
