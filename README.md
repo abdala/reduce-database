@@ -4,7 +4,7 @@
 This library aims to reduce the number of method calls and promote a fast way of building query using Doctrine DBAL wrapper class, without breaking any DBAL implementation.
 
 
-INSTALATION
+Instalation
 =========
 
 The recommended way to install is through Composer:
@@ -26,7 +26,7 @@ $db = Doctrine\DBAL\DriverManager::getConnection([
 ]);
 ```
 
-SELECT
+Select
 =========
 
 ```php
@@ -34,7 +34,7 @@ $db->tableName(); //SELECT * FROM tableName
 
 ```
 
-WHERE
+Where
 =========
 
 ```php
@@ -60,7 +60,7 @@ $db->tableName([
 
 ```
 
-TESTS
+Tests
 =========
 
 To run the test suite, you need Composer and PHPUnit:
@@ -69,12 +69,12 @@ To run the test suite, you need Composer and PHPUnit:
 ./vendor/bin/phpunit
 ```
 
-CONTRIBUTING
+Contributing
 =========
 
 Contributions are always welcome, please have a look at our issues to see if there's something you could help with.
 
-LICENSE
+License
 =========
 
 Reduce Database is licensed under MIT license.
