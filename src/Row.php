@@ -80,7 +80,7 @@ class Row implements Iterator, ArrayAccess, Countable, JsonSerializable
     
     public function offsetExists($key)
     {
-		return !! $this->offsetGet($key);
+        return !! $this->offsetGet($key);
     }
     
     public function count()
