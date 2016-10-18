@@ -87,7 +87,7 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
     
     public function offsetExists($key)
     {
-		return !! $this->offsetGet($key);
+        return !! $this->offsetGet($key);
     }
     
     public function count()
@@ -96,29 +96,29 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
         return count($this->data);
     }
     
-	public function rewind() 
+    public function rewind() 
     {
         $this->execute();
         reset($this->data);
-	}
+    }
 	
-	public function current() 
+    public function current() 
     {
         return $this->createRow(current($this->data));
-	}
+    }
 	
-	public function key() 
+    public function key() 
     {
         $this->execute();
-		return key($this->data);
-	}
+        return key($this->data);
+    }
 	
-	public function next() 
+    public function next() 
     {
-		next($this->data);
-	}
+        next($this->data);
+    }
 	
-	public function valid() 
+    public function valid() 
     {
         $key = key($this->data);
         return ($key !== null);
