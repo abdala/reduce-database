@@ -89,29 +89,29 @@ class Row implements Iterator, ArrayAccess, Countable, JsonSerializable
         return count($this->data);
     }
     
-	public function rewind() 
+    public function rewind() 
     {
         $this->execute();
         reset($this->data);
-	}
+    }
 	
-	public function current() 
+    public function current() 
     {
         return current($this->data);
-	}
+    }
 	
-	public function key() 
+    public function key() 
     {
         $this->execute();
-		return key($this->data);
-	}
+        return key($this->data);
+    }
 	
-	public function next() 
+    public function next() 
     {
-		next($this->data);
-	}
+        next($this->data);
+    }
 	
-	public function valid() 
+    public function valid() 
     {
         $key = key($this->data);
         return ($key !== null);
