@@ -132,6 +132,7 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
     
     public function jsonSerialize()
     {
+	$this->execute();
         return $this->toArray();
     }
     
