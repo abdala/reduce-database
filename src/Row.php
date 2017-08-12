@@ -119,6 +119,7 @@ class Row implements Iterator, ArrayAccess, Countable, JsonSerializable
     
     public function jsonSerialize()
     {
+	$this->execute();
         return $this->data;
     }
     
