@@ -71,8 +71,9 @@ class ResultSet implements Iterator, ArrayAccess, Countable, JsonSerializable
             return $this->createRow();
         }
         
+        $this->execute();
+	    
         if (isset($this->data[$key])) {
-            $this->execute();
             return $this->data[$key];
         }
         
