@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/ReducePHP/Database.svg?branch=master)](https://travis-ci.org/ReducePHP/Database)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ReducePHP/Database/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ReducePHP/Database/?branch=master)
+[![Build Status](https://travis-ci.org/ReducePHP/Database.svg?branch=master)](https://travis-ci.org/abdala/reduce-database)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/abdala/reduce-database/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ReducePHP/Database/?branch=master)
 
 This library aims to reduce the number of method calls and promote a fast way of building query using Doctrine DBAL wrapper class, without breaking any DBAL implementation. It was inspired by NotORM.
 
@@ -10,7 +10,7 @@ Instalation
 The recommended way to install is through Composer:
 
 ```bash
-composer require reduce\db
+composer require abdala/reduce-database
 ```
 
 Usage
