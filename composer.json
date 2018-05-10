@@ -1,5 +1,5 @@
 {
-  "name": "reduce/db",
+  "name": "abdala/reduce-database",
   "type": "library",
   "description": "Database Abstraction Layer",
   "keywords": ["dbal", "database", "persistence", "fluent-interface"],
